@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Chess extends GameManager {
 
-    private static final int gridSize = 42;
+    private static final int gridSize = 48;
 
     private static final int width = gridSize * 11;
     private static final int height = gridSize * 8;
