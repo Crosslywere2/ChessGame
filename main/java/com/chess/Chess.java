@@ -12,8 +12,8 @@ public class Chess extends GameManager {
 
     private static final int gridSize = 42;
 
-    private static final int width = gridSize * 12;
-    private static final int height = gridSize * 9;
+    private static final int width = gridSize * 11;
+    private static final int height = gridSize * 8;
     private static final int scale = 2;
 
     private static ArrayList<ChessPiece> white = new ArrayList<>(16);
@@ -45,8 +45,33 @@ public class Chess extends GameManager {
         }
     }
 
+    private int selectedIndex = -1;
+    private int plays = 0;
+    private Vector2 prevPos;
+
     public void onUpdate(double d) {
         Vector2 mouse = new Vector2(input.getMousePos());
+        if (input.isButtonPressed(1) && selectedIndex == -1) {
+            mouse = mouse.sub(mouse.mod(gridSize));
+            for (int i = 0; i < (plays % 2 == 0 ? white : black).size(); i++) {
+                if (new Vector2((plays % 2 == 0 ? white : black).get(i).getPos()).equals(mouse)) {
+                    selectedIndex = i;
+                    prevPos = new Vector2((plays % 2 == 0 ? white : black).get(i).getPos());
+                    break;
+                }
+            }
+        } else if (input.isButtonPressed(1) && (selectedIndex >= 0 || selectedIndex < (plays % 2 == 0 ? white : black).size())) {
+            mouse = mouse.sub(mouse.mod(gridSize));
+            (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse);
+            if (!prevPos.equals(mouse)) {
+                plays++;
+                prevPos = null;
+            }
+            selectedIndex = -1;
+        }
+        if (selectedIndex >= 0) {
+            (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse.sub(gridSize / 2, gridSize / 2));
+        }
         if (input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
             quit();
         }
@@ -63,7 +88,7 @@ public class Chess extends GameManager {
     }
 
     public static void main(String[] args) {
-        new Chess(new GameContainer("Chess", width, height, scale)).play();
+        new Chess(new GameContainer("Armed Chess", width, height, scale)).play();
     }
 
     private void drawBoard(int posX, int posY, int countX, int countY, int size, int color1, int color2) {
