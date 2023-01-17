@@ -6,7 +6,7 @@ import com.crossly.utils.Coordinate;
 
 public class ChessPiece {
     public enum Color {
-        WHITE, BLACK;
+        WHITE, BLACK
     }
     public enum Type {
         PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING;
@@ -29,8 +29,8 @@ public class ChessPiece {
     private Coordinate pos;
     private Type type;
     private Color color;
-    private static Coordinate maxPos = new Coordinate();
-    private static Coordinate minPos = new Coordinate();
+    private static Coordinate maxPos;
+    private static Coordinate minPos;
     public ChessPiece(String imagePath, Coordinate position, Type type, Color color) {
         image = new Image(imagePath);
         pos = position;
@@ -40,8 +40,16 @@ public class ChessPiece {
         this.color = color;
     }
 
+    public static Coordinate getMinPos() {
+        return minPos;
+    }
+
     public static void setMinPos(Coordinate pos) {
         minPos = pos;
+    }
+
+    public static Coordinate getMaxPos() {
+        return maxPos;
     }
 
     public static void setMaxPos(Coordinate pos) {

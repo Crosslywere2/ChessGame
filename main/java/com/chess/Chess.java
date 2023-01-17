@@ -14,13 +14,14 @@ public class Chess extends GameManager {
 
     private static final int width = gridSize * 11;
     private static final int height = gridSize * 8;
-    private static final int scale = 2;
+    private static final int scale = 1;
 
     private static ArrayList<ChessPiece> white = new ArrayList<>(16);
     private static ArrayList<ChessPiece> black = new ArrayList<>(16);
 
     public Chess(GameContainer gc) {
         super(gc);
+        ChessPiece.setMinPos(new Vector2());
         ChessPiece.setMaxPos(new Vector2(7, 7).mul(gridSize));
         for (int i = 0; i < 16; i++) {
             if (i < 8) {
@@ -84,7 +85,7 @@ public class Chess extends GameManager {
                     break;
                 }
             }
-        } else if (input.isButtonPressed(1) && (selectedIndex >= 0 || selectedIndex < (plays % 2 == 0 ? white : black).size())) {
+        } else if (input.isButtonPressed(1) && selectedIndex >= 0) {
             if (isWithinBoard(mouse)) {
                 mouse = mouse.sub(mouse.mod(gridSize));
                 (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse);
@@ -114,7 +115,7 @@ public class Chess extends GameManager {
     }
 
     public static void main(String[] args) {
-        new Chess(new GameContainer("Armed Chess", width, height, scale)).play();
+        new Chess(new GameContainer("Chess++", width, height, scale)).play();
     }
 
     private void drawBoard(int posX, int posY, int countX, int countY, int size, int color1, int color2) {
@@ -130,10 +131,10 @@ public class Chess extends GameManager {
         }
     }
 
-    private boolean isWithinBoard(Coordinate clickPos) {
-        // if the click pos is greater than or equal to (0, 0)
-        // and is less than the board width/height return true.
-        return ((clickPos.getX() >= 0 && clickPos.getX() < gridSize * 8) &&
-                (clickPos.getY() >= 0 && clickPos.getY() < gridSize * 8));
+    private boolean isWithinBoard(Coordinate pos) {
+        return (pos.getX() >= ChessPiece.getMinPos().getX() &&
+                pos.getX() < ChessPiece.getMaxPos().getX() + gridSize &&
+                pos.getY() >= ChessPiece.getMinPos().getY() &&
+                pos.getY() < ChessPiece.getMaxPos().getY() + gridSize);
     }
 }
