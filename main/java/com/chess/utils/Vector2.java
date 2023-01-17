@@ -42,4 +42,10 @@ public class Vector2 extends Coordinate {
     public Vector2 mod(int scalar) {
          return new Vector2(this.getX() % scalar, this.getY() % scalar);
     }
+
+    public boolean equals(Object o) {
+        if (!o.getClass().equals(this.getClass())) return false;
+        Vector2 that = (Vector2)o;
+        return this.getX() == that.getX() && this.getY() == that.getY();
+    }
 }
