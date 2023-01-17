@@ -85,14 +85,15 @@ public class Chess extends GameManager {
                 }
             }
         } else if (input.isButtonPressed(1) && (selectedIndex >= 0 || selectedIndex < (plays % 2 == 0 ? white : black).size())) {
-            mouse = mouse.sub(mouse.mod(gridSize));
-
-            (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse);
-            if (!selectedPos.equals(mouse)) {
-                plays++;
-                selectedPos = null;
+            if (isWithinBoard(mouse)) {
+                mouse = mouse.sub(mouse.mod(gridSize));
+                (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse);
+                if (!selectedPos.equals(mouse)) {
+                    plays++;
+                    selectedPos = null;
+                }
+                selectedIndex = -1;
             }
-            selectedIndex = -1;
         }
         if (selectedIndex >= 0) {
             (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse.sub(gridSize / 2, gridSize / 2));
@@ -127,5 +128,12 @@ public class Chess extends GameManager {
                 renderer.fillRectangle(x + posX, y + posY, size, size, swap ? color1 : color2);
             }
         }
+    }
+
+    private boolean isWithinBoard(Coordinate clickPos) {
+        // if the click pos is greater than or equal to (0, 0)
+        // and is less than the board width/height return true.
+        return ((clickPos.getX() >= 0 && clickPos.getX() < gridSize * 8) &&
+                (clickPos.getY() >= 0 && clickPos.getY() < gridSize * 8));
     }
 }
