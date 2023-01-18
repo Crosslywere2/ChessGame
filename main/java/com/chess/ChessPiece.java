@@ -6,7 +6,8 @@ import com.crossly.utils.Coordinate;
 
 public class ChessPiece {
     public enum Color {
-        WHITE, BLACK
+        WHITE, BLACK;
+        public int up = 0;
     }
     public enum Type {
         PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING;
@@ -29,6 +30,7 @@ public class ChessPiece {
     private Coordinate pos;
     private Type type;
     private Color color;
+    private boolean moved = false;
     private static Coordinate maxPos;
     private static Coordinate minPos;
     public ChessPiece(String imagePath, Coordinate position, Type type, Color color) {
@@ -69,8 +71,12 @@ public class ChessPiece {
         return image;
     }
 
-    public Vector2 getImageSize() {
-        return new Vector2(image.getWidth(), image.getHeight());
+    public boolean isMoved() {
+        return moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
     }
 
     public Type getType() {
