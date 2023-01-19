@@ -49,11 +49,11 @@ public class Chess extends GameManager {
                 blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 0)));
             }
         }
-        whitePieces.sort(ChessPiece::compareTo);
-        blackPieces.sort(ChessPiece::compareTo);
     }
 
     public void onCreate() {
+        whitePieces.sort(ChessPiece::compareTo);
+        blackPieces.sort(ChessPiece::compareTo);
     }
 
     public void onUpdate(double delta) {
