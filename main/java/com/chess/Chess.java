@@ -63,7 +63,7 @@ public class Chess extends GameManager {
             boolean turn = playCount % 2 == 0;
             if (selectedIndex < 0) {
                 for (int i = 0; i < (turn ? whitePieces : blackPieces).size(); i++) {
-                    if ((turn ? whitePieces : blackPieces).get(i).getPosition().compareTo(mouse) == 0) {
+                    if ((turn ? whitePieces : blackPieces).get(i).getPosition().equals(mouse)) {
                         selectedIndex = i;
                         break;
                     }
