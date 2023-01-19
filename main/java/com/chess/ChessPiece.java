@@ -7,7 +7,7 @@ import com.crossly.utils.Coordinate;
 public class ChessPiece implements Comparable<ChessPiece> {
     @Override
     public int compareTo(ChessPiece o) {
-        return this.type.getCompare().compareTo(o.type.getCompare());
+        return Integer.compare(type.ordinal, o.type.ordinal);
     }
 
     public enum Color {
@@ -22,12 +22,12 @@ public class ChessPiece implements Comparable<ChessPiece> {
     }
 
     public enum Type {
-        PAWN("a", "/White/pawn.png", "/Black/pawn1.png", 5, 3, null, null),
-        ROOK("b", "/White/rook.png", "/Black/rook1.png", 6, 4, null, null),
-        KNIGHT("c", "/White/knight.png", "/Black/knight1.png", 0, 0, null, null),
-        BISHOP("d", "/White/bishop.png", "/Black/bishop1.png", 0, 0,null, null),
-        QUEEN("e", "/White/queen.png", "/Black/queen1.png", 7, 9, null, null),
-        KING("f", "/White/king.png", "/Black/king1.png", 1, 0, null, null);
+        PAWN(1, "/White/pawn.png", "/Black/pawn1.png", 5, 3, null, null),
+        ROOK(2, "/White/rook.png", "/Black/rook1.png", 6, 4, null, null),
+        KNIGHT(3, "/White/knight.png", "/Black/knight1.png", 0, 0, null, null),
+        BISHOP(4, "/White/bishop.png", "/Black/bishop1.png", 0, 0,null, null),
+        QUEEN(5, "/White/queen.png", "/Black/queen1.png", 7, 9, null, null),
+        KING(6, "/White/king.png", "/Black/king1.png", 1, 0, null, null);
         private interface InputFunc {
             void input(int fromIndex, Color fromColor, int thisIndex, Color thisColor);
         }
@@ -38,9 +38,9 @@ public class ChessPiece implements Comparable<ChessPiece> {
         private String blackImagePath;
         private int health;
         private float actionPoints;
-        private String compare;
-        Type(String compare, String whiteImagePath, String blackImagePath, int health, int actionPoints, InputFunc input, OutputFunc output) {
-            this.compare = compare;
+        private int ordinal;
+        Type(int ordinal, String whiteImagePath, String blackImagePath, int health, int actionPoints, InputFunc input, OutputFunc output) {
+            this.ordinal = ordinal;
             this.whiteImagePath = whiteImagePath;
             this.blackImagePath = blackImagePath;
             this.health = health;
@@ -48,8 +48,8 @@ public class ChessPiece implements Comparable<ChessPiece> {
             this.input = input;
             this.output = output;
         }
-        public String getCompare() {
-            return compare;
+        public int getOrdinal() {
+            return ordinal;
         }
         public final InputFunc input;
         public final OutputFunc output;
