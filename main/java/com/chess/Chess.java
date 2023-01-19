@@ -84,6 +84,7 @@ public class Chess extends GameManager {
             for (ChessPiece piece : blackPieces)
                 System.out.println(piece.getColor() + ": " + piece.getType());
         }
+        if (input.isKeyPressed(KeyEvent.VK_ESCAPE)) quit();
     }
 
     public void onRender() {
