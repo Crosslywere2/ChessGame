@@ -1,140 +1,145 @@
 package com.chess;
 
-import com.chess.utils.Vector2;
 import com.crossly.GameContainer;
 import com.crossly.GameManager;
+import com.crossly.gfx.Image;
 import com.crossly.utils.Coordinate;
+import com.chess.utils.Vector2;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Chess extends GameManager {
 
-    private static final int gridSize = 48;
-
-    private static final int width = gridSize * 11;
-    private static final int height = gridSize * 8;
+    private static final int grid = 48;
+    private static final String title = "Super Chess";
+    private static final int width = grid * 8;
+    private static final int height = grid * 8;
     private static final int scale = 1;
 
-    private static ArrayList<ChessPiece> white = new ArrayList<>(16);
-    private static ArrayList<ChessPiece> black = new ArrayList<>(16);
+    public static final int MAX_PIECE_COUNT = 16;
+    private static final ArrayList<ChessPiece> whitePieces = new ArrayList<>(MAX_PIECE_COUNT);
+    private static final ArrayList<ChessPiece> blackPieces = new ArrayList<>(MAX_PIECE_COUNT);
 
-    public Chess(GameContainer gc) {
-        super(gc);
-        ChessPiece.setMinPos(new Vector2());
-        ChessPiece.setMaxPos(new Vector2(7, 7).mul(gridSize));
-        for (int i = 0; i < 16; i++) {
+    private static int playCount = 0;
+    private static int selectedIndex = -1;
+
+    public Chess(GameContainer container) {
+        super(container);
+        ChessPiece.setMinPos(new Coordinate(0, 0));
+        ChessPiece.setMaxPos(new Vector2(grid, grid).mul(7));
+        for (int i = 0; i < MAX_PIECE_COUNT; i++) {
             if (i < 8) {
-                white.add(i, new ChessPiece("/White/pawn.png",
-                        new Coordinate(i * gridSize, 6 * gridSize),
-                        ChessPiece.Type.PAWN, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/pawn1.png",
-                        new Coordinate(i * gridSize, gridSize),
-                        ChessPiece.Type.PAWN, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.PAWN, new Vector2(i * grid, 6 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.PAWN, new Vector2(i * grid, grid)));
             } else if (i == 8 || i == 15) {
-                white.add(i, new ChessPiece("/White/rook.png",
-                        new Coordinate((i - 8) * gridSize, 7 * gridSize),
-                        ChessPiece.Type.ROOK, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/rook1.png",
-                        new Coordinate((i - 8) * gridSize, 0),
-                        ChessPiece.Type.ROOK, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 0)));
             } else if (i == 9 || i == 14) {
-                white.add(i, new ChessPiece("/White/knight.png",
-                        new Coordinate((i - 8) * gridSize, 7 * gridSize),
-                        ChessPiece.Type.KNIGHT, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/knight1.png",
-                        new Coordinate((i - 8) * gridSize, 0),
-                        ChessPiece.Type.KNIGHT, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 0)));
             } else if (i == 10 || i == 13) {
-                white.add(i, new ChessPiece("/White/bishop.png",
-                        new Coordinate((i - 8) * gridSize, 7 * gridSize),
-                        ChessPiece.Type.BISHOP, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/bishop1.png",
-                        new Coordinate((i - 8) * gridSize, 0),
-                        ChessPiece.Type.BISHOP, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 0)));
             } else if (i == 11) {
-                white.add(i, new ChessPiece("/White/queen.png",
-                        new Coordinate((i - 8) * gridSize, 7 * gridSize),
-                        ChessPiece.Type.QUEEN, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/queen1.png",
-                        new Coordinate((i - 8) * gridSize, 0),
-                        ChessPiece.Type.QUEEN, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 0)));
             } else {
-                white.add(i, new ChessPiece("/White/king.png",
-                        new Coordinate((i - 8) * gridSize, 7 * gridSize),
-                        ChessPiece.Type.KING, ChessPiece.Color.WHITE));
-                black.add(i, new ChessPiece("/Black/king1.png",
-                        new Coordinate((i - 8) * gridSize, 0),
-                        ChessPiece.Type.KING, ChessPiece.Color.BLACK));
+                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 0)));
             }
         }
+        whitePieces.sort(ChessPiece::compareTo);
+        blackPieces.sort(ChessPiece::compareTo);
     }
 
-    private int selectedIndex = -1;
-    private int plays = 0;
-    private Vector2 selectedPos;
+    public void onCreate() {
+    }
 
-    public void onUpdate(double d) {
+    public void onUpdate(double delta) {
         Vector2 mouse = new Vector2(input.getMousePos());
-        if (input.isButtonPressed(1) && selectedIndex == -1) {
-            mouse = mouse.sub(mouse.mod(gridSize));
-            for (int i = 0; i < (plays % 2 == 0 ? white : black).size(); i++) {
-                if (new Vector2((plays % 2 == 0 ? white : black).get(i).getPos()).equals(mouse)) {
-                    selectedIndex = i;
-                    selectedPos = new Vector2((plays % 2 == 0 ? white : black).get(i).getPos());
-                    break;
+        mouse = mouse.sub(mouse.mod(grid));
+        if (input.isButtonPressed(1)) {
+            boolean turn = playCount % 2 == 0;
+            if (selectedIndex < 0) {
+                for (int i = 0; i < (turn ? whitePieces : blackPieces).size(); i++) {
+                    if ((turn ? whitePieces : blackPieces).get(i).getPosition().compareTo(mouse) == 0) {
+                        selectedIndex = i;
+                        break;
+                    }
+                }
+            } else {
+                if ((turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().compareTo(mouse) != 0) {
+                    (turn ? whitePieces : blackPieces).get(selectedIndex).setPosition(mouse);
+                    selectedIndex = -1;
+                    playCount++;
+                } else {
+                    selectedIndex = -1;
                 }
             }
-        } else if (input.isButtonPressed(1) && selectedIndex >= 0) {
-            if (isWithinBoard(mouse)) {
-                mouse = mouse.sub(mouse.mod(gridSize));
-                (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse);
-                if (!selectedPos.equals(mouse)) {
-                    plays++;
-                    selectedPos = null;
-                }
-                selectedIndex = -1;
-            }
         }
-        if (selectedIndex >= 0) {
-            (plays % 2 == 0 ? white : black).get(selectedIndex).setPos(mouse.sub(gridSize / 2, gridSize / 2));
-        }
-        if (input.isKeyPressed(KeyEvent.VK_ESCAPE)) {
-            quit();
-            System.exit(0);
+        if (input.isKeyPressed(KeyEvent.VK_SPACE)) {
+            for (ChessPiece piece : whitePieces)
+                System.out.println(piece.getColor() + ": " + piece.getType());
+            for (ChessPiece piece : blackPieces)
+                System.out.println(piece.getColor() + ": " + piece.getType());
         }
     }
 
     public void onRender() {
-        drawBoard(0, 0, 8, 8, gridSize, 0xff6d3e17, 0xfff0c380);
-        if (selectedIndex >= 0 && selectedPos != null) {
-            renderer.fillRectangle(selectedPos.getX(), selectedPos.getY(), gridSize, gridSize, plays % 2 == 0 ? 0xffff4040 : 0xff0080ff);
+        drawChessBoard();
+        if (selectedIndex >= 0) {
+            if (playCount % 2 == 0) {
+                fillRectangle(whitePieces.get(selectedIndex).getPosition(), 0xffff0000);
+            } else {
+                fillRectangle(blackPieces.get(selectedIndex).getPosition(), 0xff0000ff);
+            }
         }
-        for (ChessPiece piece : white) renderer.drawImage(piece.getImage(), piece.getPos().getX(), piece.getPos().getY());
-        for (ChessPiece piece : black) renderer.drawImage(piece.getImage(), piece.getPos().getX(), piece.getPos().getY());
+        for (ChessPiece piece : whitePieces) {
+            drawImage(piece.getImage(), piece.getPosition());
+        }
+        for (ChessPiece piece : blackPieces) {
+            drawImage(piece.getImage(), piece.getPosition());
+        }
+    }
+
+    public void dispose() {
+        System.exit(0);
+    }
+
+    public static int getPlayCount() {
+        return playCount;
+    }
+
+    public static ArrayList<ChessPiece> getWhitePieces() {
+        return whitePieces;
+    }
+
+    public static ArrayList<ChessPiece> getBlackPieces() {
+        return blackPieces;
     }
 
     public static void main(String[] args) {
-        new Chess(new GameContainer("Chess++", width, height, scale)).play();
+        new Chess(new GameContainer(title, width, height, scale)).play();
     }
 
-    private void drawBoard(int posX, int posY, int countX, int countY, int size, int color1, int color2) {
+    private void fillRectangle(Coordinate position, int color) {
+        renderer.fillRectangle(position.getX(), position.getY(), grid, grid, color);
+    }
+
+    private void drawImage(Image image, Coordinate coordinate) {
+        renderer.drawImage(image, coordinate.getX(), coordinate.getY());
+    }
+
+    private void drawChessBoard() {
         boolean swap = false;
-        int width = size * countX;
-        int height = size * countY;
-        for (int y = 0; y < height; y += size) {
+        for (int i = 0; i < 8; i++) {
             swap = !swap;
-            for (int x = 0; x < width; x += size) {
+            for (int j = 0; j < 8; j++) {
                 swap = !swap;
-                renderer.fillRectangle(x + posX, y + posY, size, size, swap ? color1 : color2);
+                renderer.fillRectangle(i * grid, j * grid, grid, grid, swap ? 0xff6d3e17 : 0xfff0c380);
             }
         }
     }
-
-    private boolean isWithinBoard(Coordinate pos) {
-        return (pos.getX() >= ChessPiece.getMinPos().getX() &&
-                pos.getX() < ChessPiece.getMaxPos().getX() + gridSize &&
-                pos.getY() >= ChessPiece.getMinPos().getY() &&
-                pos.getY() < ChessPiece.getMaxPos().getY() + gridSize);
-    }
 }
+

@@ -55,11 +55,8 @@ public class Vector2 extends Coordinate implements Comparable<Vector2> {
 
     @Override
     public int compareTo(Vector2 o) {
-        if (this.equals(o)) return 0;
-        else {
-            int thisMagSqr = getX() * getX() + getY() * getY();
-            int thatMagSqr = o.getX() * o.getX() + o.getY() * o.getY();
-            return (thisMagSqr > thatMagSqr ? 1 : -1);
-        }
+        int thisMagSqr = getX() * getX() + getY() * getY();
+        int thatMagSqr = o.getX() * o.getX() + o.getY() * o.getY();
+        return Integer.compare(thisMagSqr, thatMagSqr);
     }
 }
