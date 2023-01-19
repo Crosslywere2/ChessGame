@@ -69,7 +69,7 @@ public class Chess extends GameManager {
                     }
                 }
             } else {
-                if ((turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().compareTo(mouse) != 0) {
+                if (!(turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().equals(mouse)) {
                     (turn ? whitePieces : blackPieces).get(selectedIndex).setPosition(mouse);
                     selectedIndex = -1;
                     playCount++;
