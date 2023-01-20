@@ -30,23 +30,23 @@ public class Chess extends GameManager {
         ChessPiece.setMaxPos(new Vector2(grid, grid).mul(7));
         for (int i = 0; i < MAX_PIECE_COUNT; i++) {
             if (i < 8) {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.PAWN, new Vector2(i * grid, 6 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.PAWN, new Vector2(i * grid, grid)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.PAWN, new Vector2(i * grid, 6 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.PAWN, new Vector2(i * grid, grid)));
             } else if (i == 8 || i == 15) {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 7 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 0)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.ROOK, new Vector2((i - 8) * grid, 0)));
             } else if (i == 9 || i == 14) {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 7 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 0)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.KNIGHT, new Vector2((i - 8) * grid, 0)));
             } else if (i == 10 || i == 13) {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 7 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 0)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.BISHOP, new Vector2((i - 8) * grid, 0)));
             } else if (i == 11) {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 7 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 0)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.QUEEN, new Vector2((i - 8) * grid, 0)));
             } else {
-                whitePieces.add(new ChessPiece(ChessPiece.Color.WHITE, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 7 * grid)));
-                blackPieces.add(new ChessPiece(ChessPiece.Color.BLACK, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 0)));
+                whitePieces.add(new ChessPiece(i, ChessPiece.Color.WHITE, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 7 * grid)));
+                blackPieces.add(new ChessPiece(i + 16, ChessPiece.Color.BLACK, ChessPiece.Type.KING, new Vector2((i - 8) * grid, 0)));
             }
         }
     }

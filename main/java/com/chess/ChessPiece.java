@@ -14,33 +14,93 @@ public class ChessPiece implements Comparable<ChessPiece> {
 
     public enum Color {
         WHITE(-1), BLACK(1);
+        private final int increment;
         Color(int increment) {
             this.increment = increment;
         }
-        private int increment = 0;
         public int getIncrement() {
             return increment;
         }
     }
 
     public enum Type {
-        PAWN(1, "/White/pawn.png", "/Black/pawn1.png", 5, 3, null, null),
-        ROOK(2, "/White/rook.png", "/Black/rook1.png", 6, 4, null, null),
-        KNIGHT(3, "/White/knight.png", "/Black/knight1.png", 0, 0, null, null),
-        BISHOP(4, "/White/bishop.png", "/Black/bishop1.png", 0, 0,null, null),
-        QUEEN(5, "/White/queen.png", "/Black/queen1.png", 7, 9, null, null),
-        KING(6, "/White/king.png", "/Black/king1.png", 1, 0, null, null);
+        PAWN(1, "/White/pawn.png", "/Black/pawn1.png", 5, 3,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                }),
+        ROOK(2, "/White/rook.png", "/Black/rook1.png", 6, 4,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                }),
+        KNIGHT(3, "/White/knight.png", "/Black/knight1.png", 0, 0,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                }),
+        BISHOP(4, "/White/bishop.png", "/Black/bishop1.png", 0, 0,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                }),
+        QUEEN(5, "/White/queen.png", "/Black/queen1.png", 7, 9,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                }),
+        KING(6, "/White/king.png", "/Black/king1.png", 1, 0,
+                (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
+                    ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
+                    if (fromColor == thisColor) {
+                        piece.health = Math.max(piece.health + 1, piece.type.health);
+                    } else {
+                        piece.health = Math.max(piece.health - 1, 0);
+                    }
+                },
+                () -> {
+                });
         private interface InputFunc {
-            void input(int fromIndex, Color fromColor, int thisIndex, Color thisColor);
+            void response(int fromIndex, Color fromColor, int thisIndex, Color thisColor);
         }
         private interface OutputFunc {
-            void output();
+            void action();
         }
-        private String whiteImagePath;
-        private String blackImagePath;
-        private int health;
-        private float actionPoints;
-        private int ordinal;
+        private final String whiteImagePath;
+        private final String blackImagePath;
+        private final int health;
+        private final int actionPoints;
+        private final int ordinal;
         Type(int ordinal, String whiteImagePath, String blackImagePath, int health, int actionPoints, InputFunc input, OutputFunc output) {
             this.ordinal = ordinal;
             this.whiteImagePath = whiteImagePath;
@@ -55,6 +115,9 @@ public class ChessPiece implements Comparable<ChessPiece> {
         }
         public final InputFunc input;
         public final OutputFunc output;
+        public int getActionPoints() {
+            return actionPoints;
+        }
         public String getWhiteImagePath() {
             return whiteImagePath;
         }
@@ -68,13 +131,18 @@ public class ChessPiece implements Comparable<ChessPiece> {
     private Vector2 position;
     private Image image;
     private int health;
-
-    public ChessPiece(Color color, Type type, Vector2 position) {
+    private final int id;
+    public ChessPiece(int id, Color color, Type type, Vector2 position) {
+        this.id = id;
         this.color = color;
         this.type = type;
         this.position = position;
         image = new Image(color == Color.WHITE ? type.getWhiteImagePath() : type.getBlackImagePath());
         health = type.health;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Color getColor() {
@@ -113,7 +181,7 @@ public class ChessPiece implements Comparable<ChessPiece> {
     }
 
     public void outputTick() {
-        type.output.output();
+        type.output.action();
     }
 
     private static Coordinate minPos;
