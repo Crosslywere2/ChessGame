@@ -91,9 +91,9 @@ public class Chess extends GameManager {
         drawChessBoard();
         if (selectedIndex >= 0) {
             if (playCount % 2 == 0) {
-                fillRectangle(whitePieces.get(selectedIndex).getPosition(), 0xffff0000);
+                renderer.fillRectangle(whitePieces.get(selectedIndex).getPosition(), grid, grid, 0xffff4040);
             } else {
-                fillRectangle(blackPieces.get(selectedIndex).getPosition(), 0xff0000ff);
+                renderer.fillRectangle(blackPieces.get(selectedIndex).getPosition(), grid, grid, 0xff0080ff);
             }
         }
         for (ChessPiece piece : whitePieces) {
@@ -122,14 +122,6 @@ public class Chess extends GameManager {
 
     public static void main(String[] args) {
         new Chess(new GameContainer(title, width, height, scale)).play();
-    }
-
-    private void fillRectangle(Coordinate position, int color) {
-        renderer.fillRectangle(position.getX(), position.getY(), grid, grid, color);
-    }
-
-    private void drawImage(Image image, Coordinate coordinate) {
-        renderer.drawImage(image, coordinate.getX(), coordinate.getY());
     }
 
     private void drawChessBoard() {
