@@ -24,7 +24,7 @@ public class ChessPiece implements Comparable<ChessPiece> {
     }
 
     public enum Type {
-        PAWN(1, "/White/pawn.png", "/Black/pawn1.png", 5, 3,
+        PAWN(1, "/White/pawn.png", "/Black/pawn1.png", 4, 1,
                 (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
                     ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
                     if (fromColor == thisColor) {
@@ -46,7 +46,7 @@ public class ChessPiece implements Comparable<ChessPiece> {
                 },
                 () -> {
                 }),
-        KNIGHT(3, "/White/knight.png", "/Black/knight1.png", 0, 0,
+        KNIGHT(3, "/White/knight.png", "/Black/knight1.png", 6, 8,
                 (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
                     ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
                     if (fromColor == thisColor) {
@@ -57,7 +57,7 @@ public class ChessPiece implements Comparable<ChessPiece> {
                 },
                 () -> {
                 }),
-        BISHOP(4, "/White/bishop.png", "/Black/bishop1.png", 0, 0,
+        BISHOP(4, "/White/bishop.png", "/Black/bishop1.png", 6, 4,
                 (int fromIndex, Color fromColor, int thisIndex, Color thisColor) -> {
                     ChessPiece piece = (thisColor == Color.WHITE ? Chess.getWhitePieces() : Chess.getBlackPieces()).get(thisIndex);
                     if (fromColor == thisColor) {
@@ -139,6 +139,14 @@ public class ChessPiece implements Comparable<ChessPiece> {
         this.position = position;
         image = new Image(color == Color.WHITE ? type.getWhiteImagePath() : type.getBlackImagePath());
         health = type.health;
+    }
+
+    public ChessPiece(ChessPiece other) {
+        this.id = other.id;
+        this.color = other.color;
+        this.type = other.type;
+        this.position = other.position;
+        this.health = other.health;
     }
 
     public int getId() {

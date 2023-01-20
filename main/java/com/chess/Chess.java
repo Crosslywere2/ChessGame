@@ -72,7 +72,7 @@ public class Chess extends GameManager {
                 if (!(turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().equals(mouse)) {
                     (turn ? whitePieces : blackPieces).get(selectedIndex).setPosition(mouse);
                     ChessBoard.takePiece(turn, selectedIndex);
-                    ChessBoard.updatePieces(turn, selectedIndex);
+                    ChessBoard.removeDeadPieces(turn, selectedIndex);
                     selectedIndex = -1;
                     playCount++;
                 } else {

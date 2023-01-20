@@ -16,8 +16,14 @@ public class ChessBoard {
         }
     }
 
-    public static void updatePieces(boolean whitesTurn, int selectedIndex) {
-        ArrayList<ChessPiece> pieces = new ArrayList<>(chessPieceMap.size() - 2);
+    public static void removeDeadPieces(boolean whitesTurn, int selectedIndex) {
+        Collection<ChessPiece> pieces = new ArrayList<>();
+        chessPieceMap.values().forEach(chessPiece -> pieces.add(new ChessPiece(chessPiece)) );
+        for (ChessPiece piece : pieces) {
+            if (piece.getHealth() <= 0) {
+                (piece.getColor() == ChessPiece.Color.WHITE ? Chess.getWhitePieces() : Chess.getWhitePieces()).remove(chessPieceMap.remove(piece.getId()));
+            }
+        }
     }
 
     public static void takePiece(boolean whitesTurn, int selectedIndex) {
