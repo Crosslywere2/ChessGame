@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Chess extends GameManager {
 
-    private static final int grid = 48;
+    public static final int grid = 48;
     private static final String title = "Super Chess";
     private static final int width = grid * 8;
     private static final int height = grid * 8;
@@ -22,6 +22,7 @@ public class Chess extends GameManager {
 
     private static int playCount = 0;
     private static int selectedIndex = -1;
+    private ArrayList<Vector2> moves = null;
 
     public Chess(GameContainer container) {
         super(container);
@@ -64,15 +65,22 @@ public class Chess extends GameManager {
             if (selectedIndex < 0) {
                 for (int i = 0; i < (turn ? whitePieces : blackPieces).size(); i++) {
                     if ((turn ? whitePieces : blackPieces).get(i).getPosition().equals(mouse)) {
+                        moves = MoveGenerator.generateMoves((turn ? whitePieces : blackPieces).get(i));
+                        for (Vector2 move : moves) {
+                            Coordinate rep = move.div(grid).add(1, 0);
+                            System.out.println((char)(rep.getY() + 'A') + ", " + rep.getX());
+                        }
                         selectedIndex = i;
                         break;
                     }
                 }
             } else {
-                if (!(turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().equals(mouse)) {
+                if (!(turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().equals(mouse) && moves.contains(mouse)) {
                     (turn ? whitePieces : blackPieces).get(selectedIndex).setPosition(mouse);
                     ChessBoard.takePiece(turn, selectedIndex);
-                    ChessBoard.removeDeadPieces(turn, selectedIndex);
+                    ChessBoard.takeAction(turn);
+                    ChessBoard.removeDeadPieces(turn);
+                    moves = null;
                     selectedIndex = -1;
                     playCount++;
                 } else {
@@ -97,18 +105,11 @@ public class Chess extends GameManager {
             } else {
                 renderer.fillRectangle(blackPieces.get(selectedIndex).getPosition(), grid, grid, 0xff0080ff);
             }
+            drawMoveOptions();
         }
         for (ChessPiece piece : ChessBoard.getChessPieces()) {
             renderer.drawImage(piece.getImage(), piece.getPosition());
         }
-    }
-
-    public void dispose() {
-        System.exit(0);
-    }
-
-    public static int getPlayCount() {
-        return playCount;
     }
 
     public static ArrayList<ChessPiece> getWhitePieces() {
@@ -133,5 +134,16 @@ public class Chess extends GameManager {
             }
         }
     }
+
+   private void drawMoveOptions() {
+        if (moves == null) return;
+        boolean turn = playCount % 2 == 0;
+        for (Vector2 move : moves) {
+            renderer.drawRectangle(move, grid - 1, grid - 1, turn ? 0xffff4040 : 0xff0080ff);
+            renderer.drawRectangle(move.add(1, 1), grid - 3, grid - 3, turn ? 0xffff4040 : 0xff0080ff);
+            renderer.drawRectangle(move.add(2, 2), grid - 5, grid - 5, turn ? 0xffff4040 : 0xff0080ff);
+            renderer.drawRectangle(move.add(3, 3), grid - 7, grid - 7, turn ? 0xffff4040 : 0xff0080ff);
+        }
+   }
 }
 

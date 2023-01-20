@@ -7,19 +7,22 @@ import com.crossly.utils.Coordinate;
 import java.util.Objects;
 
 public class ChessPiece implements Comparable<ChessPiece> {
-    @Override
-    public int compareTo(ChessPiece o) {
-        return Integer.compare(type.ordinal, o.type.ordinal);
-    }
 
     public enum Color {
-        WHITE(-1), BLACK(1);
+        WHITE(-Chess.grid), BLACK(Chess.grid);
+
         private final int increment;
+
         Color(int increment) {
             this.increment = increment;
         }
+
         public int getIncrement() {
             return increment;
+        }
+
+        public final Color getOpposite() {
+            return this == WHITE ? BLACK : WHITE;
         }
     }
 
@@ -90,17 +93,25 @@ public class ChessPiece implements Comparable<ChessPiece> {
                 },
                 () -> {
                 });
+
         private interface InputFunc {
             void response(int fromIndex, Color fromColor, int thisIndex, Color thisColor);
         }
+
         private interface OutputFunc {
             void action();
         }
+
         private final String whiteImagePath;
+
         private final String blackImagePath;
+
         private final int health;
+
         private final int actionPoints;
+
         private final int ordinal;
+
         Type(int ordinal, String whiteImagePath, String blackImagePath, int health, int actionPoints, InputFunc input, OutputFunc output) {
             this.ordinal = ordinal;
             this.whiteImagePath = whiteImagePath;
@@ -110,28 +121,38 @@ public class ChessPiece implements Comparable<ChessPiece> {
             this.input = input;
             this.output = output;
         }
-        public int getOrdinal() {
-            return ordinal;
-        }
+
         public final InputFunc input;
+
         public final OutputFunc output;
+
         public int getActionPoints() {
             return actionPoints;
         }
+
         public String getWhiteImagePath() {
             return whiteImagePath;
         }
+
         public String getBlackImagePath() {
             return blackImagePath;
         }
     }
 
     private Color color;
+
     private Type type;
+
     private Vector2 position;
+
     private Image image;
+
     private int health;
+
     private final int id;
+
+    private boolean moved = false;
+
     public ChessPiece(int id, Color color, Type type, Vector2 position) {
         this.id = id;
         this.color = color;
@@ -147,6 +168,14 @@ public class ChessPiece implements Comparable<ChessPiece> {
         this.type = other.type;
         this.position = other.position;
         this.health = other.health;
+    }
+
+    public boolean isMoved() {
+        return moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
     }
 
     public int getId() {
@@ -188,23 +217,33 @@ public class ChessPiece implements Comparable<ChessPiece> {
         return health;
     }
 
-    public void outputTick() {
+    public void takeAction() {
         type.output.action();
     }
 
     private static Coordinate minPos;
+
     public static Coordinate getMinPos() {
         return minPos;
     }
+
     public static void setMinPos(Coordinate coordinate) {
         minPos = coordinate;
     }
+
     private static Coordinate maxPos;
+
     public static Coordinate getMaxPos() {
         return maxPos;
     }
+
     public static void setMaxPos(Coordinate coordinate) {
         maxPos = coordinate;
+    }
+
+    @Override
+    public int compareTo(ChessPiece o) {
+        return Integer.compare(type.ordinal, o.type.ordinal);
     }
 
     @Override
