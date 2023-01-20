@@ -2,7 +2,6 @@ package com.chess;
 
 import com.crossly.GameContainer;
 import com.crossly.GameManager;
-import com.crossly.gfx.Image;
 import com.crossly.utils.Coordinate;
 import com.chess.utils.Vector2;
 
@@ -54,6 +53,7 @@ public class Chess extends GameManager {
     public void onCreate() {
         whitePieces.sort(ChessPiece::compareTo);
         blackPieces.sort(ChessPiece::compareTo);
+        ChessBoard.init();
     }
 
     public void onUpdate(double delta) {
@@ -71,6 +71,8 @@ public class Chess extends GameManager {
             } else {
                 if (!(turn ? whitePieces : blackPieces).get(selectedIndex).getPosition().equals(mouse)) {
                     (turn ? whitePieces : blackPieces).get(selectedIndex).setPosition(mouse);
+                    ChessBoard.takePiece(turn, selectedIndex);
+                    ChessBoard.updatePieces(turn, selectedIndex);
                     selectedIndex = -1;
                     playCount++;
                 } else {
@@ -96,11 +98,8 @@ public class Chess extends GameManager {
                 renderer.fillRectangle(blackPieces.get(selectedIndex).getPosition(), grid, grid, 0xff0080ff);
             }
         }
-        for (ChessPiece piece : whitePieces) {
-            drawImage(piece.getImage(), piece.getPosition());
-        }
-        for (ChessPiece piece : blackPieces) {
-            drawImage(piece.getImage(), piece.getPosition());
+        for (ChessPiece piece : ChessBoard.getChessPieces()) {
+            renderer.drawImage(piece.getImage(), piece.getPosition());
         }
     }
 
