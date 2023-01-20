@@ -4,6 +4,8 @@ import com.chess.utils.Vector2;
 import com.crossly.gfx.Image;
 import com.crossly.utils.Coordinate;
 
+import java.util.Objects;
+
 public class ChessPiece implements Comparable<ChessPiece> {
     @Override
     public int compareTo(ChessPiece o) {
@@ -129,4 +131,16 @@ public class ChessPiece implements Comparable<ChessPiece> {
         maxPos = coordinate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece piece = (ChessPiece) o;
+        return getColor() == piece.getColor() && getType() == piece.getType() && Objects.equals(getPosition(), piece.getPosition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getColor(), getType(), getPosition());
+    }
 }
